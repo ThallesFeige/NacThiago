@@ -1,0 +1,77 @@
+﻿@model List<Mercado>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 style="margin-top: 75px">Lista de Mercados</h1>
+
+<nac texto="@TempData["msg"]"></nac>
+
+
+    <form class="form-inline" method="get" asp-action="pesquisar">
+        <input name="nome" class="form-control mr-sm-2 w-50" type="text" placeholder="Pesquisar pelo Nome (Ordenado pelo porte!)" aria-label="Pesquisar">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
+    </form>
+
+
+<!-- Tabela html com uma linha com os titulos e (loop) uma linha para cada mercado da lista-->
+<a asp-action="Cadastrar">Cadastrar um novo Mercado</a>
+
+<table class="table">
+    <tr>
+        <th>Código</th>
+        <th>Nome</th>
+        <th>Capacidade</th>
+        <th>Novo</th>
+        <th>Porte</th>
+        <th>Data de abertura</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MercadoId</td>
+            <td>@item.Nome</td>
+            <td>@item.Capacidade</td>
+            <td>@(item.Novo?"Sim":"Não")</td>
+            <td>@item.Porte</td>
+            <td>@item.DataAbertura.ToShortDateString()</td>
+            <td>
+                <a asp-action="Editar" asp-route-id="@item.MercadoId" class="btn btn-sm btn-outline-success">Editar</a>
+                <button onclick="mercadoId.value= @item.MercadoId" type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal" data-target="#exampleModal">
+                    Excluir
+                </button>
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confimação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Confirma essa transação?
+            </div>
+            <div class="modal-footer">
+                <form asp-action="remover">
+                    <input type="hidden" name="id" id="mercadoId" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                    <button type="submit" class="btn btn-danger">Sim</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
